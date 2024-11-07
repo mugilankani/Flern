@@ -5,6 +5,7 @@ const PathSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ["learn", "quiz", "feedback"],
+    default: "learn",
     required: true,
   },
   title: {

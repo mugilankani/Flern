@@ -1,8 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import connectDB from "./db.js";
 import User from "./models/user.js";
 import Course from "./models/course.js";
+
+import courseRoutes from "./routes/course.js";
 
 const app = express();
 
@@ -36,6 +41,8 @@ app.get("/api/courses", async (req, res) => {
     res.status(500).json({ message: "Error fetching courses" });
   }
 });
+
+app.use("/api/course", courseRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
