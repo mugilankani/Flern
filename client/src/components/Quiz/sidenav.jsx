@@ -14,7 +14,7 @@ export default function SideNav({
     <div className="w-[40%] rounded-tr-3xl bg-[#EFEFEF] text-black">
       <h1 className="text-2xl font-semibold mb-8">Questions:</h1>
       
-      <div className="grid grid-cols-3 gap-3 max-w-[440px]">
+      <div className="grid grid-cols-3 gap-3 max-w-[410px] px-10">
         {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((number) => (
           <button
             key={number}
@@ -34,7 +34,7 @@ export default function SideNav({
 
       <button
         className="mt-auto fixed bottom-8 text-xl font-medium hover:text-gray-600 transition-colors"
-        onClick={() => navigate('/quizresult')}
+        onClick={() => navigate('/result')}
       >
         Finish
       </button>

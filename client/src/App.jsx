@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import Course from "./pages/Course";
 import Quiz from "./pages/Quiz";
 import Result from "./pages/Result";
+import LearningUnit from "./pages/LearningUnit";
+
 function App() {
   return (
     <main className="m-auto flex h-screen w-full max-w-screen-2xl flex-col">
@@ -16,6 +18,7 @@ function App() {
           <Route path="/course" element={<Course />}></Route>
           <Route path="/quiz" element={<Quiz />}></Route>
           <Route path="/result" element={<Result />}></Route>
+          <Route path="/content" element={<LearningUnit />}></Route>
         </Routes>
       </div>
     </main>

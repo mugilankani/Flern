@@ -5,6 +5,7 @@ function Result(){
     return (
         <div className="flex h-full w-full overflow-y-hidden rounded-2xl">
         <Content />
+        
       </div>
     )
 }

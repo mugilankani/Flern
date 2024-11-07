@@ -1,8 +1,10 @@
 import React from "react";
 import Courses from "../../data/courses";
 import Resume from "../../assets/resume.svg";
+import { useNavigate } from "react-router-dom";
 
 function Content() {
+  const Navigate = useNavigate()
   return (
     <div className="flex w-full flex-col overflow-y-scroll bg-neutral-100 p-6">
       <h1 className="mt-2 font-sans text-2xl font-semibold">
@@ -35,7 +37,7 @@ function Content() {
             className="relative cursor-pointer rounded-3xl border border-neutral-200 bg-white p-5 hover:shadow-lg"
           >
             {/* Button with Resume image */}
-            <button className="absolute right-0 top-0 mr-4 mt-4">
+            <button onClick={()=>Navigate('/course')} className="absolute right-0 top-0 mr-4 mt-4">
               <img src={Resume} alt="Resume" className="h-10 w-10" />
             </button>
 
