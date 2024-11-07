@@ -3,10 +3,14 @@ import modules from "../../data/modules";
 import Course from "../../data/courses";
 
 function Content() {
-  const [isToggled, setIsToggled] = useState(false);
+  const [toggleStates, setToggleStates] = useState(
+    Array(modules.length).fill(false)
+  );
 
-  const handleToggle = () => {
-    setIsToggled((prevState) => !prevState);
+  const handleToggle = (index) => {
+    setToggleStates((prevStates) =>
+      prevStates.map((state, i) => (i === index ? !state : state))
+    );
   };
 
   return (
@@ -59,18 +63,18 @@ function Content() {
               </div>
               <div
                 className="ml-4 flex h-6 w-11 cursor-pointer items-center rounded-2xl bg-neutral-200 p-1"
-                onClick={handleToggle}
+                onClick={() => handleToggle(index)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   className={`h-4 transition-transform duration-300 ${
-                    isToggled
+                    toggleStates[index]
                       ? "translate-x-6 opacity-0"
                       : "translate-x-1 opacity-100"
                   }`}
@@ -87,7 +91,7 @@ function Content() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   className={`h-4 w-4 transition-transform duration-300 ${
-                    isToggled
+                    toggleStates[index]
                       ? "translate-x-0 opacity-100"
                       : "-translate-x-6 opacity-0"
                   }`}
