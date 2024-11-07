@@ -20,13 +20,13 @@ const content = {
         "answer": "Encryption"
       },
       {
-        "questionType":"4",
+        "questionType":"1",
         "question": "Why is algorithm efficiency important?",
         "options": ["To make the program run slower", "To minimize the use of resources like time and memory", "To increase processing power", "To simplify the code"],
         "answer": "To minimize the use of resources like time and memory"
       },
       {
-        "questionType":"5",
+        "questionType":"2",
         "question": "Which area of computer science frequently uses algorithms?",
         "options": ["Artificial intelligence", "Operating systems", "Networking", "All of the above"],
         "answer": "All of the above"
