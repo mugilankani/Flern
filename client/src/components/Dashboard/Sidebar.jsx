@@ -55,7 +55,7 @@ export default function SideNav() {
               {event.avatar && (
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={event.avatar} alt="Avatar" />
-                  <AvatarFallback>AV</AvatarFallback>
+            
                 </Avatar>
               )}
               <div className="flex-1">

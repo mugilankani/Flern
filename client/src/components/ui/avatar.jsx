@@ -2,9 +2,7 @@ import React from "react";
 
 export function Avatar({ className, children }) {
   return (
-    <div className={`relative inline-flex items-center justify-center rounded-full overflow-hidden ${className}`}>
-      {children}
-    </div>
+  <></>
   );
 }
 
