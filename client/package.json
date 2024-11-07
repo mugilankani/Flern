@@ -11,6 +11,7 @@
     "format": "prettier **/*.{js,jsx,html,json,css} --write"
   },
   "dependencies": {
+    "@shadcn/ui": "^0.0.4",
     "lucide-react": "^0.454.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
