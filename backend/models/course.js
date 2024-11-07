@@ -55,6 +55,10 @@ const CourseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true
+    },
     modules: [ModuleSchema], // An array of ModuleSchema objects
     progress: {
       type: Number, // Track progress as a percentage (0-100)

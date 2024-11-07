@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Courses from "../../data/courses";
 import Resume from "../../assets/resume.svg";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 function Content() {
   const Navigate = useNavigate()
+  const [courses,setCourses] =  useState()
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/courses")
+    .then((res) => {setCourses(res.data),console.log(res.data)} )
+  },[])
+
   return (
     <div className="flex w-full flex-col overflow-y-scroll bg-neutral-100 p-6">
       <h1 className="mt-2 font-sans text-2xl font-semibold">
@@ -31,21 +39,21 @@ function Content() {
       </div>
       <hr className="mt-2" />
       <div className="mt-8 ml-14 grid w-[850px] grid-cols-1 gap-6 pb-6 md:grid-cols-2">
-        {Courses.map((course, index) => (
+        {courses && courses.map((course, index) => (
           <div
-            key={index}
-            className="relative cursor-pointer  rounded-3xl border border-neutral-200 bg-white p-5 hover:shadow-lg"
+          key={index}
+          className="relative cursor-pointer  rounded-3xl border border-neutral-200 bg-white p-5 hover:shadow-lg"
           >
             {/* Button with Resume image */}
             <button
               onClick={() => Navigate("/course")}
               className="absolute top-[-20px] right-[-15px] p-2 bg-transparent hover:bg-gray-200 rounded-full"
-            >
+              >
               <img src={Resume} alt="Resume" className="h-10 w-10" />
             </button>
 
             <h2 className="w-64 py-0  text-[1.4rem] font-semibold leading-6">
-              {course.courseName}
+              {course.title}
             </h2>
             <p className="mt-4 py-2 text-[1rem] w-[220px] text-gray-600">
               {course.description}
@@ -55,7 +63,7 @@ function Content() {
                 <div
                   className="h-3 rounded-full bg-blue-500"
                   style={{ width: `${course.progress}%` }}
-                ></div>
+                  ></div>
               </div>
               <p className="text-xs font-medium">{course.progress}%</p>
             </div>

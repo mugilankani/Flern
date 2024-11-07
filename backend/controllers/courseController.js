@@ -30,6 +30,7 @@ The response should be a JSON object with the following structure:
 
 {{
     "title": "course name",
+    "description": "course_description",
     "modules": [
         {{
             "title": "module title",
@@ -47,9 +48,9 @@ Format the response as a valid JSON object.`,
 );
 
 // Generate roadmap for a given topic
-export async function generateRoadmap(topic) {
+export async function generateRoadmap(topic,subject) {
   try {
-    const prompt = await promptTemplate.format({ topic });
+    const prompt = await promptTemplate.format({ topic, subject });
     const response = await model.invoke(prompt);
     const roadmap = await parser.parse(response.content);
     return roadmap;
@@ -60,13 +61,14 @@ export async function generateRoadmap(topic) {
 }
 
 // Create a new course in the database based on the roadmap generated
-export async function createCourse(topic) {
+export async function createCourse(topic,subject) {
   try {
-    const roadmap = await generateRoadmap(topic);
+    const roadmap = await generateRoadmap(topic,subject);
 
     // Create a new course document from the roadmap data
     const newCourse = new Course({
       title: roadmap.title,
+      description: roadmap.description,
       modules: roadmap.modules,
     });
 

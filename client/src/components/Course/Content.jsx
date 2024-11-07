@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import modules from "../../data/modules";
+import React, { useEffect, useState } from "react";
+// import modules from "../../data/modules";
 import Course from "../../data/courses";
+import axios from 'axios'
 
 function Content() {
-  const [toggleStates, setToggleStates] = useState(
-    Array(modules.length).fill(false)
-  );
-
+  const [modules,setModules] = useState()
+  
+  const [toggleStates, setToggleStates] = useState();
   const handleToggle = (index) => {
     setToggleStates((prevStates) =>
       prevStates.map((state, i) => (i === index ? !state : state))
     );
   };
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/courses")
+    .then((res) => {setModules(res.data.modules),setToggleStates(Array(res.data?.modules?.length).fill(false))
+    } )
+  },[])
 
   return (
     <div className="h-screen w-full rounded-l-2xl bg-neutral-100 p-6 pt-5">
@@ -28,7 +34,7 @@ function Content() {
       <div className="mt-4 flex items-center justify-between border-t pt-4">
         <div className="flex items-end px-6">
           <p className="mr-6 font-medium">Module-1</p>
-          <p>{modules[0].title}</p>
+          <p>{modules && modules[0].title}</p>
         </div>
 
         <div className="flex space-x-2">
@@ -50,7 +56,7 @@ function Content() {
       </div>
 
       <div className="mt-4 grid h-[calc(100vw-55.5rem)] grid-cols-1 gap-6 overflow-y-scroll pb-4 pr-3 md:grid-cols-2">
-        {modules.map((module, index) => (
+        {modules && modules.map((module, index) => (
           <div
             key={index}
             className={`relative h-fit rounded-3xl bg-white p-5 shadow-md`}
