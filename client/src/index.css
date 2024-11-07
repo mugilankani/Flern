@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Geist", sans-serif !important;
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    local("Geist"),
+    url("./assets/fonts/Geist/Geist-Regular.woff2") format("woff2"),
+    url("./assets/fonts/Geist/Geist-Bold.woff2") format("woff2"),
+    url("./assets/fonts/Geist/Geist-Medium.woff2") format("woff2"),
+    url("./assets/fonts/Geist/Geist-SemiBold.woff2") format("woff2"),
+    url("./assets/fonts/Geist/Geist-Black.woff2") format("woff2"),
+    url("./assets/fonts/Geist/Geist-Light.woff2") format("woff2");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    local("Geist-Bold"),
+    url("./assets/fonts/Geist/Geist-Bold.woff2") format("woff2");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    local("Geist-Medium"),
+    url("./assets/fonts/Geist/Geist-Medium.woff2") format("woff2");
+  font-weight: 500; /* Medium weight */
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    local("Geist-SemiBold"),
+    url("./assets/fonts/Geist/Geist-SemiBold.woff2") format("woff2");
+  font-weight: 600; /* Semi-bold weight */
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    local("Geist-Black"),
+    url("./assets/fonts/Geist/Geist-Black.woff2") format("woff2");
+  font-weight: 900; /* Black weight */
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    local("Geist-Light"),
+    url("./assets/fonts/Geist/Geist-Light.woff2") format("woff2");
+  font-weight: 300; /* Light weight */
+}
