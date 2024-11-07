@@ -1,0 +1,11 @@
+{
+  "name": "flern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier **/*.{js,jsx,html,json,css} --write"
+  },
+  "author": "",
+  "license": "ISC"
+}
