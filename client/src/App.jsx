@@ -6,6 +6,7 @@ import Course from "./pages/Course";
 import Quiz from "./pages/Quiz";
 import Result from "./pages/Result";
 import LearningUnit from "./pages/LearningUnit";
+import Leaderboard from "./pages/Leaderboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/quiz" element={<Quiz />}></Route>
           <Route path="/result" element={<Result />}></Route>
           <Route path="/content" element={<LearningUnit />}></Route>
+          <Route path="/leaderboard" element={<Leaderboard />}></Route>
         </Routes>
       </div>
     </main>

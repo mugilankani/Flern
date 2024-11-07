@@ -1,6 +1,6 @@
 import React from "react";
-import SideNav from "../Components/Dashboard/Sidebar";
-import Content from "../Components/Dashboard/Content";
+import SideNav from "../components/Dashboard/Sidebar";
+import Content from "../components/Dashboard/Content";
 
 function Dashboard() {
   return (
