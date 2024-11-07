@@ -80,7 +80,7 @@ export default function Content() {
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-14">
           <div className="bg-[#EBEBEB] rounded-3xl shadow-sm">
             <div className="bg-black h-16 flex items-center px-6 rounded-t-3xl">
               <h3 className="text-white text-lg">
@@ -147,7 +147,7 @@ export default function Content() {
 
             <button
               onClick={handleToggleReview}
-              className="mt-4 text-xl font-medium hover:text-gray-600 transition-colors"
+              className="mb-3 px-5 py-4 text-xl font-medium hover:text-gray-600 transition-colors"
             >
               {reviewedQuestions.includes(currentQuestionIndex)
                 ? "Unmark Review"
