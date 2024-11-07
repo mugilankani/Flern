@@ -30,24 +30,27 @@ function Content() {
         New course
       </div>
       <hr className="mt-2" />
-      <div className="mt-8 grid w-full grid-cols-1 gap-6 pb-6 md:grid-cols-2">
+      <div className="mt-8 ml-14 grid w-[850px] grid-cols-1 gap-6 pb-6 md:grid-cols-2">
         {Courses.map((course, index) => (
           <div
             key={index}
-            className="relative cursor-pointer rounded-3xl border border-neutral-200 bg-white p-5 hover:shadow-lg"
+            className="relative cursor-pointer  rounded-3xl border border-neutral-200 bg-white p-5 hover:shadow-lg"
           >
             {/* Button with Resume image */}
-            <button onClick={()=>Navigate('/course')} className="absolute right-0 top-0 mr-4 mt-4">
+            <button
+              onClick={() => Navigate("/course")}
+              className="absolute top-[-20px] right-[-15px] p-2 bg-transparent hover:bg-gray-200 rounded-full"
+            >
               <img src={Resume} alt="Resume" className="h-10 w-10" />
             </button>
 
-            <h2 className="w-64 text-xl font-semibold leading-6">
+            <h2 className="w-64 py-0  text-[1.4rem] font-semibold leading-6">
               {course.courseName}
             </h2>
-            <p className="mt-2 text-[0.7rem] text-gray-600">
+            <p className="mt-4 py-2 text-[1rem] w-[220px] text-gray-600">
               {course.description}
             </p>
-            <div className="mt-4 flex items-center justify-center gap-4">
+            <div className="mt-10 flex items-center justify-center gap-4">
               <div className="h-3 w-full rounded-full bg-gray-200">
                 <div
                   className="h-3 rounded-full bg-blue-500"

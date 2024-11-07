@@ -58,9 +58,13 @@ function Content() {
             <h2 className="w-48 text-2xl font-semibold">{module.title}</h2>
             <p className="mt-2 text-sm text-black">{module.description}</p>
             <div className="mt-5 flex items-center justify-between">
-              <div className="bg-button1 flex justify-center rounded-2xl py-2 text-xs font-medium text-neutral-800">
-                {module.status}
-              </div>
+            <div
+  className={`flex justify-center rounded-2xl py-2 px-3 text-xs font-medium text-neutral-800 ${
+    module.status === "Completed 👏" ? "bg-[#C4FAC6]" : "bg-neutral-200"
+  }`}
+>
+  {module.status}
+</div>
               <div
                 className="ml-4 flex h-6 w-11 cursor-pointer items-center rounded-2xl bg-neutral-200 p-1"
                 onClick={() => handleToggle(index)}
