@@ -1,8 +1,11 @@
+import { configDotenv } from "dotenv";
+configDotenv();
 import express from "express";
 import cors from "cors";
 import connectDB from "./db.js";
 import User from "./models/user.js";
 import Course from "./models/course.js";
+import authRouter from "./routes/googleAuth.js";
 
 const app = express();
 
@@ -10,7 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-connectDB();
+// connectDB();
+
+app.use(authRouter)
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
