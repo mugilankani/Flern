@@ -5,47 +5,49 @@ import SideNav from "../Quiz/sidenav";
 
 export default function Content() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [completedQuestions, setCompletedQuestions] = useState([]);
-  const [fillInTheBlankAnswer, setFillInTheBlankAnswer] = useState("");
-  const [shortAnswer, setShortAnswer] = useState("");
+  const [reviewedQuestions, setReviewedQuestions] = useState([]);
+  const [answers, setAnswers] = useState({});
   const totalQuestions = content.quiz.length;
 
   const handleNext = () => {
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOptionIndex(null);
-      setFillInTheBlankAnswer("");
-      setShortAnswer("");
     }
   };
 
   const handleBack = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedOptionIndex(null);
-      setFillInTheBlankAnswer("");
-      setShortAnswer("");
     }
   };
 
   const currentQuestion = content.quiz[currentQuestionIndex];
 
   const handleOptionClick = (index) => {
-    setSelectedOptionIndex(index);
+    setSelectedOptions({ ...selectedOptions, [currentQuestionIndex]: index });
+    markQuestionAsCompleted(currentQuestionIndex);
   };
 
-  const handleQuestionClick = (number) => {
-    setCurrentQuestionIndex(number - 1);
-    setSelectedOptionIndex(null);
-    setFillInTheBlankAnswer("");
-    setShortAnswer("");
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setAnswers({ ...answers, [currentQuestionIndex]: value });
+    markQuestionAsCompleted(currentQuestionIndex);
   };
 
-  const handleCompleteQuestion = () => {
-    if (!completedQuestions.includes(currentQuestionIndex + 1)) {
-      setCompletedQuestions([...completedQuestions, currentQuestionIndex + 1]);
+  const markQuestionAsCompleted = (index) => {
+    if (!completedQuestions.includes(index)) {
+      setCompletedQuestions([...completedQuestions, index]);
     }
+  };
+
+  const handleToggleReview = () => {
+    setReviewedQuestions((prev) =>
+      prev.includes(currentQuestionIndex)
+        ? prev.filter((q) => q !== currentQuestionIndex)
+        : [...prev, currentQuestionIndex]
+    );
   };
 
   const initialTime = 30 * 30;
@@ -95,8 +97,11 @@ export default function Content() {
                 currentQuestion.options.map((option, index) => (
                   <div
                     key={index}
-                    className={`flex items-center rounded-lg p-4 transition-colors
-                      ${selectedOptionIndex === index ? 'bg-[#C4FAC6]' : 'bg-white hover:bg-gray-50'}`}
+                    className={`flex items-center rounded-lg p-4 transition-colors ${
+                      selectedOptions[currentQuestionIndex] === index
+                        ? "bg-[#C4FAC6]"
+                        : "bg-white hover:bg-gray-50"
+                    }`}
                     onClick={() => handleOptionClick(index)}
                   >
                     <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center mr-4">
@@ -110,15 +115,15 @@ export default function Content() {
                   type="text"
                   className="w-full p-4 border rounded-lg"
                   placeholder="Type your answer here..."
-                  value={fillInTheBlankAnswer}
-                  onChange={(e) => setFillInTheBlankAnswer(e.target.value)}
+                  value={answers[currentQuestionIndex] || ""}
+                  onChange={handleInputChange}
                 />
               ) : currentQuestion.questionType === "3" ? (
                 <textarea
                   className="w-full p-4 border rounded-lg"
                   placeholder="Write your answer here..."
-                  value={shortAnswer}
-                  onChange={(e) => setShortAnswer(e.target.value)}
+                  value={answers[currentQuestionIndex] || ""}
+                  onChange={handleInputChange}
                 ></textarea>
               ) : null}
             </div>
@@ -141,10 +146,12 @@ export default function Content() {
             </div>
 
             <button
-              onClick={handleCompleteQuestion}
+              onClick={handleToggleReview}
               className="mt-4 text-xl font-medium hover:text-gray-600 transition-colors"
             >
-              Mark for Review
+              {reviewedQuestions.includes(currentQuestionIndex)
+                ? "Unmark Review"
+                : "Mark for Review"}
             </button>
           </div>
         </div>
@@ -153,7 +160,8 @@ export default function Content() {
         currentQuestion={currentQuestionIndex + 1}
         totalQuestions={totalQuestions}
         completedQuestions={completedQuestions}
-        onQuestionClick={handleQuestionClick}
+        reviewedQuestions={reviewedQuestions}
+        onQuestionClick={setCurrentQuestionIndex}
       />
     </div>
   );
