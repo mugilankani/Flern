@@ -46,16 +46,16 @@ function Content() {
           >
             {/* Button with Resume image */}
             <button
-              onClick={() => Navigate("/course")}
-              className="absolute top-[-20px] right-[-15px] p-2 bg-transparent hover:bg-gray-200 rounded-full"
-              >
+            onClick={() => Navigate(`/course?id=${course._id}`)} // Pass the course ID here
+            className="absolute top-[-20px] right-[-15px] p-2 bg-transparent hover:bg-gray-200 rounded-full"
+          >
               <img src={Resume} alt="Resume" className="h-10 w-10" />
             </button>
 
-            <h2 className="w-64 py-0  text-[1.4rem] font-semibold leading-6">
+            <h2 className="w-[80%] py-0  text-[1.4rem] font-semibold leading-6">
               {course.title}
             </h2>
-            <p className="mt-4 py-2 text-[1rem] w-[220px] text-gray-600">
+            <p className="mt-4 py-2 text-[0.81rem]  text-gray-600">
               {course.description}
             </p>
             <div className="mt-10 flex items-center justify-center gap-4">
