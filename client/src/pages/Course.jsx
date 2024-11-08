@@ -1,6 +1,6 @@
 import React from "react";
-import SideNav from "../Components/Course/Sidebar";
-import Content from "../Components/Course/Content";
+import SideNav from "../components/Course/Sidebar";
+import Content from "../components/Course/Content";
 
 function Course() {
   return (

@@ -43,6 +43,7 @@ function Content() {
       <div className="mt-8 ml-14 grid w-[850px] grid-cols-1 gap-6 pb-6 md:grid-cols-2">
         {courses && courses.map((course, index) => (
           <div
+          onClick={() => Navigate(`/course?id=${course._id}`)} // Pass the course ID here
           key={index}
           className="relative cursor-pointer  rounded-3xl border border-neutral-200 bg-white p-5 hover:shadow-lg"
           >
