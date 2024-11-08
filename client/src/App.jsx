@@ -7,7 +7,6 @@ import Quiz from "./pages/Quiz";
 import Result from "./pages/Result";
 import LearningUnit from "./pages/LearningUnit";
 import Leaderboard from "./pages/Leaderboard";
-import Home from "./pages/Home";
 import Create from "./pages/Create"
 
 function App() {

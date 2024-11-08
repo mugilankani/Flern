@@ -1,6 +1,7 @@
 import express from "express";
 import { createCourse } from "../controllers/courseController.js"; // Import the course creation controller
 import Course from "../models/course.js";
+import { editCourse } from "../controllers/editCourseController";
 
 const router = express.Router();
 
@@ -35,5 +36,22 @@ router.post("/id",async (req,res) => {
     res.status(500).json({ message: "Error finding course" });
   }
 })
+
+router.post("/edit", async (req, res) => {
+  const { text, prompt } = req.body; // Expect the text to be passed in the request body
+  if (!prompt) {
+    return res.status(400).json({ message: "Prompt is required" });
+  }
+
+  
+
+  try {
+    await editCourse(text, prompt);
+    res.status(201).json({ message: "Course modified successfully" });
+  } catch (error) {
+    console.error("Error editing course:", error);
+    res.status(500).json({ message: "Error editing course" });
+  }
+});
 
 export default router;
