@@ -74,6 +74,7 @@ export async function createCourse(topic,subject) {
 
     // Save the course to the database
     await newCourse.save();
+    return newCourse
 
     console.log("Course created and saved to the database:", newCourse);
   } catch (error) {

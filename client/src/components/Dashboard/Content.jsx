@@ -3,6 +3,7 @@ import Courses from "../../data/courses";
 import Resume from "../../assets/resume.svg";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import Popup from "./Popup"
 
 function Content() {
   const Navigate = useNavigate()
@@ -14,6 +15,7 @@ function Content() {
   },[])
 
   return (
+    <>
     <div className="flex w-full flex-col overflow-y-scroll bg-neutral-100 p-6">
       <h1 className="mt-2 font-sans text-2xl font-semibold">
         Start learning now
@@ -29,7 +31,7 @@ function Content() {
             strokeLinecap="round"
             strokeLinejoin="round"
             className="h-5 w-5"
-          >
+            >
             <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
             <line x1="12" x2="12" y1="8" y2="16" />
             <line x1="8" x2="16" y1="12" y2="12" />
@@ -48,7 +50,7 @@ function Content() {
             <button
             onClick={() => Navigate(`/course?id=${course._id}`)} // Pass the course ID here
             className="absolute top-[-20px] right-[-15px] p-2 bg-transparent hover:bg-gray-200 rounded-full"
-          >
+            >
               <img src={Resume} alt="Resume" className="h-10 w-10" />
             </button>
 
@@ -70,7 +72,9 @@ function Content() {
           </div>
         ))}
       </div>
+      <Popup/>
     </div>
+        </>
   );
 }
 

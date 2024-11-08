@@ -1,10 +1,10 @@
 import React from "react";
-import Content from "../components/CreateWork/content";
+import Popup from "../components/Dashboard/Popup";
 
 function Dashboard() {
   return (
     <div className="flex h-full w-full overflow-y-hidden rounded-2xl">
-      <Content />
+      <Popup />
     </div>
   );
 }

@@ -17,8 +17,8 @@ const PathSchema = new mongoose.Schema({
     required: true,
   },
   content: {
-    type: [String], // Array of content URLs or data
-    default: [],
+    type: String, // Array of content URLs or data
+    default: "",
   },
   metadata: {
     generated: {

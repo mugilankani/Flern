@@ -144,7 +144,7 @@ async function generateContent(topic,course) {
 
         console.log(response)
         
-        return response.content;
+        return response;
     } catch (error) {
         console.error("Error generating content:", error);
         throw error;

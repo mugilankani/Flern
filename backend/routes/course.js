@@ -1,7 +1,8 @@
 import express from "express";
 import { createCourse } from "../controllers/courseController.js"; // Import the course creation controller
 import Course from "../models/course.js";
-import { editCourse } from "../controllers/editCourseController";
+import { editCourse } from "../controllers/editCourseController.js";
+import { createContent } from "../controllers/contentController.js";
 
 const router = express.Router();
 
@@ -14,15 +15,31 @@ router.post("/create", async (req, res) => {
 
   try {
     // Call the createCourse function from the controller
-    await createCourse(topic, subject);
-    res.status(201).json({ message: "Course created successfully" });
+    const course = await createCourse(topic, subject);
+    res.status(201).json({id:course.data._id});
   } catch (error) {
     console.error("Error creating course:", error);
     res.status(500).json({ message: "Error creating course" });
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.post("/create-topic", async (req, res) => {
+  const { topic, subject } = req.body; 
+  if (!topic) {
+    return res.status(400).json({ message: "Topic is required" });
+  }
+
+  try {
+    // Call the createCourse function from the controller
+    const content = await createContent(topic, subject);
+    res.status(201).json(content);
+  } catch (error) {
+    console.error("Error creating content:", error);
+    res.status(500).json({ message: "Error creating content" });
+  }
+});
+
+router.get("/find/:id", async (req, res) => {
   const { id } = req.params; // Correctly access id from URL params
   if (!id) {
     return res.status(400).json({ message: "Id is required" });
@@ -38,6 +55,19 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.put("/update", async (req,res) => {
+  const {id,content} = req.body
+  if(!id){
+    return res.status(400).json({ message: "Id is required" })
+  }
+  try {
+    const course = await Course.findByIdAndUpdate(id,{content:content},{new:true})
+    res.status(200).json(course)
+  } catch (error) {
+    console.error("Error updating course:", error);
+    res.status(500).json({ message: "Error updating course" });
+  }
+})
 
 router.post("/edit", async (req, res) => {
   const { text, prompt } = req.body; // Expect the text to be passed in the request body
@@ -45,11 +75,9 @@ router.post("/edit", async (req, res) => {
     return res.status(400).json({ message: "Prompt is required" });
   }
 
-  
-
   try {
-    await editCourse(text, prompt);
-    res.status(201).json({ message: "Course modified successfully" });
+    const modifiedText = await editCourse(text, prompt);
+    res.status(201).send(modifiedText);
   } catch (error) {
     console.error("Error editing course:", error);
     res.status(500).json({ message: "Error editing course" });

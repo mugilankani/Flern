@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 function Content() {
@@ -10,6 +10,7 @@ function Content() {
 
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("id");
+  const navigate = useNavigate()
 
   // Function to check if a learning path is clickable
   const isPathClickable = (moduleIndex, pathIndex) => {
@@ -59,9 +60,16 @@ function Content() {
       });
 
       setCurrentPath({ moduleIndex, pathIndex });
-      
+
+      const currentModule = modules[moduleIndex];
+      const topic = currentModule.path[pathIndex].title
+      const subject = course.title
+
       // You can add additional logic here for what happens when a path is clicked
       console.log(`Module ${moduleIndex + 1}, Path ${pathIndex + 1} clicked`);
+
+      navigate(`/content/${courseId}/${moduleIndex}/${pathIndex}?topic=${topic}&subject=${subject}`)
+      
     } catch (error) {
       console.error("Error updating path:", error);
     }
@@ -76,7 +84,7 @@ function Content() {
 
     const fetchCourseData = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/course/${courseId}`);
+        const res = await axios.get(`http://localhost:3000/api/course/find/${courseId}`);
         setCourse(res.data);
         setModules(res.data.modules);
         setToggleStates(Array(res.data?.modules?.length).fill(false));
@@ -101,11 +109,6 @@ function Content() {
         />
       </div>
       
-      <div className="mt-4 flex items-center justify-between border-t pt-4">
-        <div className="flex items-end px-6">
-          <p className="mr-6 font-medium text-neutral-700">Modules</p>
-        </div>
-      </div>
 
       {modules.map((module, moduleIndex) => (
         <div key={moduleIndex}>

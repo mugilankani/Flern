@@ -45,6 +45,16 @@ app.get("/api/courses", async (req, res) => {
 	}
 });
 
+app.get("/api/courses/:id", async (req, res) => {
+  const id = req.query.id
+	try {
+		const courses = await Course.findById(id);
+		res.json(courses);
+	} catch (error) {
+		res.status(500).json({ message: "Error fetching courses" });
+	}
+});
+
 app.use("/api/course", courseRoutes);
 
 // Start the server

@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import { Edit3 } from 'lucide-react';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 
 const ContentEditor = () => {
   const [sections, setSections] = useState([]);
@@ -6,37 +9,11 @@ const ContentEditor = () => {
   const [prompt, setPrompt] = useState('');
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const popupRef = useRef(null);
-
-  const content = `##  Why is the Indian Rupee Falling?  Understanding Currency Fluctuations\n\nHey there, friend! Welcome to our lesson on currency fluctuations, specific
-ally focusing on why the Indian Rupee might be going down.  This is a super important topic, especially if you're interested in international finance, investing, or s
-imply understanding how the global economy works. \n\n**Get ready to learn:**\n\n* How currency rates are determined.\n* The factors that influence the Indian Rupee's
- value.\n* Why understanding these fluctuations matters to you.\n\n**Let's dive in!** \n\n###  Why is the Indian Rupee Falling?\n\nThink about it this way: Imagine th
-e Indian Rupee as a product being traded on a global marketplace. Its price fluctuates based on supply and demand, just like any other product. \n\n**Factors that inf
-luence the Rupee's value:**\n\n* **Demand for Indian goods and services:**  When more people want to buy Indian products or services, the demand for Rupees increases,
- making it stronger. Imagine India exporting lots of software or spices - that drives up demand for Rupees.\n* **Investment in India:**  Foreign investors pouring mon
-ey into Indian businesses or assets increases the demand for Rupees, boosting its value.\n* **Interest rates:** Higher interest rates in India attract foreign investm
-ent, making the Rupee more attractive. This can make it stronger.\n* **Inflation:** High inflation in India weakens the purchasing power of the Rupee, leading to its 
-depreciation.  \n* **Government policies:**  Policies like export incentives or restrictions on imports can impact the Rupee's value.\n* **Global economic conditions:
-**  A strong US dollar, for example, can make the Rupee weaker, as investors might shift their funds to the stronger dollar.\n\n**Think of it like this:**  If you hav
-e a popular product everyone wants, its price will go up!  The same applies to currencies. When the demand for Indian Rupees is high, its value increases. \n\n**Real-
-world examples:**\n\n* **Increased demand for Indian software:**  The Indian tech industry's growth has increased demand for Rupees, making it stronger.\n* **Foreign 
-investment in Indian infrastructure:**  Companies investing in Indian infrastructure projects are buying Rupees, contributing to its strength.\n* **High inflation in 
-India:**  If prices for goods and services rise significantly in India, the Rupee weakens as its purchasing power decreases.\n\n\n###  Why Do Currency Rates Fluctuate
-?\n\nImagine you have a local store selling fruits. The prices of these fruits change based on the season, availability, and demand. Similarly, currency rates change 
-constantly due to a variety of factors:\n\n* **Economic conditions:**  Growth or recession in a country, inflation rates, interest rates, and government policies all 
-impact currency value.\n* **Political stability:**  Political instability in a country can scare away investors, leading to currency depreciation.\n* **Global events:
-**  Wars, natural disasters, and trade tensions can all impact currency rates.\n* **Speculation:**  Traders might buy or sell currencies based on their predictions, s
-ometimes causing significant fluctuations.\n\n**Pro Tip:** Currency rates are constantly changing, even on a minute-by-minute basis.  Keep an eye on economic news and
- global events to understand the reasons behind these fluctuations.\n\n\n###  Why Does It Matter to You?\n\nUnderstanding currency fluctuations is crucial for several
- reasons:\n\n* **Travel:**  If you plan to travel abroad, a weaker Rupee means your money won't go as far.\n* **Investments:**  If you invest in foreign markets or co
-mpanies, currency fluctuations can impact your returns.\n* **Exports and imports:**  Businesses exporting goods and services are affected by changes in currency rates
-, as their profits can be impacted.\n\n**Remember:**  A weak Rupee doesn't necessarily mean it's a bad thing. It can benefit some sectors like tourism and exports, wh
-ile making imports more expensive.\n\n**Common Pitfalls to Avoid:**\n\n* **Panicking over short-term fluctuations:**  Currency rates can fluctuate dramatically in the
- short term, but don't let temporary dips or rises scare you. Focus on long-term trends.\n* **Ignoring the impact of global events:**  Don't underestimate the impact 
-of global events on currency rates.  Stay informed about major news and developments.\n\n###  Practice Opportunities\n\n* **Track the Rupee's exchange rate against the US dollar for a week.**  Note any significant changes and try to identify the reasons behind them. \n* **Research the impact of a strong or weak Rupee on different 
-sectors of the Indian economy.**\n\n**Summary and Next Steps:**\n\nThe Indian Rupee's value is constantly changing, influenced by various economic, political, and glo
-bal factors.  Understanding these factors is crucial for navigating the global economy, making informed decisions about travel, investments, and business.\n\n**Keep learning!**  Explore more about:\n\n* **Key economic indicators:**  Understanding GDP, inflation, and interest rates will provide a deeper understanding of currency fluctuations.\n* **The role of central banks:**  Learn how the Reserve Bank of India (RBI) manages the Rupee's value.\n* **International trade and its impact on currencies:**  Explore how global trade agreements and policies affect currency rates. \n\nYou're doing great!  Keep exploring and learning about the fascinating world of ec
-onomics and finance.  \n`
+  const [content,setContent] =  useState()
+  const {courseId,moduleId,pathId} = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const topic = searchParams.get("topic")
+  const subject = searchParams.get("subject")
 
   useEffect(() => {
     // Split content into logical sections while preserving markdown structure
@@ -50,9 +27,19 @@ onomics and finance.  \n`
       }).filter(Boolean); // Remove empty sections
     };
 
+    const fetchContent = async () => {
+      const response = await axios.get(`http://localhost:3000/api/courses/${courseId}`)
+      if(!response){
+        const topicContent = await axios.post("http://localhost:3000/api/course/create-topic", {"topic":topic,"subject": subject })
+        setContent(topicContent.content)
+      }else{
+        setContent(response.data?.modules[moduleId]?.path[pathId]?.content)
+      }
+    }
+    fetchContent()
     const initialContent = parseContent(content);
     setSections(initialContent);
-  }, []);
+  }, [content]);
 
   const handleSectionClick = (index, event) => {
     const rect = event.target.getBoundingClientRect();
@@ -69,10 +56,13 @@ onomics and finance.  \n`
 
     try {
       // Simulated API call
-      const modifiedText = `${sections[selectedSection]} (Modified based on: ${prompt})`;
+      const text = sections[selectedSection]
+      const modifiedText = await axios.post("http://localhost:3000/api/course/edit",{text, prompt})
       const newSections = [...sections];
-      newSections[selectedSection] = modifiedText;
+      newSections[selectedSection] = modifiedText.data;
       setSections(newSections);
+      console.log(newSections[selectedSection])
+      // await axios.put("http://localhost:3000/api/course/update",{content: newSections})
       setPrompt('');
       setSelectedSection(null);
     } catch (error) {
@@ -115,11 +105,14 @@ onomics and finance.  \n`
   };
 
   const renderContent = (text) => {
-    if (isHeader(text)) {
+
+    const content = typeof text === 'string' ? text : '';
+
+    if (isHeader(content)) {
       return text.replace(/^#{1,6}\s/, '');
     }
     
-    if (isList(text)) {
+    if (isList(content)) {
       return text.split('\n').map((item, i) => (
         <div key={i} className="flex items-start">
           <span className="mr-2">•</span>
@@ -128,7 +121,7 @@ onomics and finance.  \n`
       ));
     }
     
-    return text.split(/(\*\*.*?\*\*)/).map((part, i) => {
+    return content.split(/(\*\*.*?\*\*)/).map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return <strong key={i}>{part.slice(2, -2)}</strong>;
       }
@@ -207,6 +200,7 @@ onomics and finance.  \n`
           </div>
         ))}
       </div>
+      {/* <Edit3 onClick={} className='absolute top-10 right-5 cursor-pointer size-8 rounded-full'/> */}
     </div>
   );
 };

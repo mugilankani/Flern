@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../../assets/logo.svg";
 import send from "../../assets/send.svg"
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
-function Content() {
+function Popup() {
+
+  const [topic,setTopic] = useState()
+  const [subject,setSubject] = useState()
+  const navigate = useNavigate()
+
+  const handleSubmit = async () => {
+    const response = await axios.post("http://localhost:3000/api/course/create", {"topic":topic,"subject":subject})
+    navigate(`/course?id=${response.data.id}`)
+  }
+
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center bg-neutral-100 p-6 pt-5">
       <h1 className="font-sans text-2xl font-semibold mb-8">Create Course</h1>
@@ -20,6 +32,7 @@ function Content() {
             id=""
             cols="60"
             rows="1"
+            onChange={(e) => setTopic(e.target.value)}
             placeholder="Enter course details..."
             ></textarea>
         </div>
@@ -32,11 +45,12 @@ function Content() {
             id=""
             cols="60"
             rows="1"
+            onChange={(e) => setSubject(e.target.value)}
             placeholder="Enter course details..."
             ></textarea>
         </div>
 
-        <button className="mt-6 flex justify-between space-x-2 bg-black text-white py-2 px-6 rounded-3xl">
+        <button onClick={handleSubmit} className="mt-6 flex justify-between space-x-2 bg-black text-white py-2 px-6 rounded-3xl">
           Strat Creating
           <img className="pl-2" src={send} alt="" />
         </button>
@@ -45,4 +59,4 @@ function Content() {
   );
 }
 
-export default Content;
+export default Popup;

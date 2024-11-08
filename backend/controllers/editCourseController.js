@@ -5,7 +5,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 
 // Initialize the Gemini model
 const model = new ChatGoogleGenerativeAI({
-  modelName: "gemini-1.5-flash-latest",
+  modelName: "gemini-1.5-pro-002",
   apiKey: process.env.GEMINI_API_KEY, // Make sure to set your API key in environment variables
 });
 
@@ -32,7 +32,7 @@ Remember to:
 - Support diverse learning styles
 - Include opportunities for reflection or application
 
-Return the modified text.
+Return the modified text without any markup unless the original text itself had it.
 
 `,
 );
@@ -42,7 +42,7 @@ export async function modifyText(text,prompt) {
   try {
     const modifyPrompt = await promptTemplate.format({ text, prompt });
     const response = await model.invoke(modifyPrompt);
-    return response;
+    return response.content;
   } catch (error) {
     console.error("Error modifying text:", error);
     throw error;
