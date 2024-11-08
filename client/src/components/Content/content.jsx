@@ -28,18 +28,14 @@ const ContentEditor = () => {
     };
 
     const fetchContent = async () => {
-      const response = await axios.get(`http://localhost:3000/api/courses/${courseId}`)
-      if(!response){
-        const topicContent = await axios.post("http://localhost:3000/api/course/create-topic", {"topic":topic,"subject": subject })
-        setContent(topicContent.content)
-      }else{
-        setContent(response.data?.modules[moduleId]?.path[pathId]?.content)
-      }
+      const topicContent = await axios.post("http://localhost:3000/api/course/create-topic", {"topic":topic,"subject": subject })
+      console.log(topicContent)
+      const initialContent = parseContent(topicContent.data);
+      setSections(initialContent);
     }
+
     fetchContent()
-    const initialContent = parseContent(content);
-    setSections(initialContent);
-  }, [content]);
+  }, []);
 
   const handleSectionClick = (index, event) => {
     const rect = event.target.getBoundingClientRect();

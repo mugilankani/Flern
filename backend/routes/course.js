@@ -69,6 +69,31 @@ router.put("/update", async (req,res) => {
   }
 })
 
+router.post('/updatePathContent', async (req, res) => {
+  const { courseId, moduleIndex, pathIndex, title, description } = req.body;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) return res.status(404).json({ error: "Course not found" });
+
+    const module = course.modules[moduleIndex];
+    if (!module) return res.status(404).json({ error: "Module not found" });
+
+    const path = module.path[pathIndex];
+    if (!path) return res.status(404).json({ error: "Path not found" });
+
+    path.metadata.generated = true;
+    path.content.push(`Content for ${title}: ${description}`);
+    path.metadata.updatedAt = Date.now();
+
+    await course.save();
+    res.status(200).json({ message: "Content updated successfully", path });
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.post("/edit", async (req, res) => {
   const { text, prompt } = req.body; // Expect the text to be passed in the request body
   if (!prompt) {

@@ -41,16 +41,16 @@ function Content() {
       alert("Complete previous learning paths first!");
       return;
     }
-
+    
     try {
-      
+      const currentModule = modules[moduleIndex];
+      const topic = currentModule.path[pathIndex].title
+      const subject = course.title
       // Make API call to mark the path as generated
-      const response = await axios.post(`http://localhost:3000/api/updatePath`, {
-        courseId,
-        moduleIndex,
-        pathIndex,
-        generated: true
-      });
+      // const response = await axios.post(`http://localhost:3000/api/course/create-topic`, {
+      //   topic,
+      //   subject
+      // });
 
       // Update the local state with the new generated status
       setModules(prevModules => {
@@ -60,10 +60,6 @@ function Content() {
       });
 
       setCurrentPath({ moduleIndex, pathIndex });
-
-      const currentModule = modules[moduleIndex];
-      const topic = currentModule.path[pathIndex].title
-      const subject = course.title
 
       // You can add additional logic here for what happens when a path is clicked
       console.log(`Module ${moduleIndex + 1}, Path ${pathIndex + 1} clicked`);

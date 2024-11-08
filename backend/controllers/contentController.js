@@ -144,7 +144,7 @@ async function generateContent(topic,course) {
 
         console.log(response)
         
-        return response;
+        return response.content;
     } catch (error) {
         console.error("Error generating content:", error);
         throw error;
@@ -152,12 +152,9 @@ async function generateContent(topic,course) {
 }
 
 // Example usage
-export async function createContent() {
+export async function createContent(topic,course) {
     try {
-        const topic = "Why is the Indian Rupee falling? Why do currency rates fluctuate?";
-        const course = "Economics and politics"
         const content = await generateContent(topic,course);
-        
         console.log(content);
         return content
     } catch (error) {
