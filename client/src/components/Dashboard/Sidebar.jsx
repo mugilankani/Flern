@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card } from "@/components/ui/card"
 import { Clock, Mic, Star, Target } from "lucide-react"
+import { motion } from "framer-motion" // Import framer-motion
 
 // This is sample data - replace with your actual data
 const events = [
@@ -47,37 +48,42 @@ export default function SideNav() {
       </h1>
       <div className="space-y-4">
         {events.map((event, index) => (
-          <Card
+          <motion.div
             key={index}
-            className={`${event.color} rounded-2xl border-none p-4 shadow-sm transition-transform hover:scale-[1.02]`}
+            initial={{ opacity: 0, x: 20 }} // Start offscreen to the right
+            animate={{ opacity: 1, x: 0 }}    // Move to its original position
+            transition={{ duration: 0.8, delay: index * 0.2 }} // Adds delay between elements
           >
-            <div className="flex items-start gap-3">
-              {event.avatar && (
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={event.avatar} alt="Avatar" />
-            
-                </Avatar>
-              )}
-              <div className="flex-1">
-                <div className="mb-2 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <event.icon className="h-4 w-4" />
-                    <span className="text-sm font-medium">{event.type}</span>
-                  </div>
-                  <span className="text-sm text-gray-600">{event.date}</span>
-                </div>
-                <div className="bg-white p-4 rounded-3xl">
-                  <p className="mb-2 text-sm">{event.title}</p>
-                </div>
-                {event.time && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>Start at {event.time}</span>
-                  </div>
+            <Card
+              className={`${event.color} rounded-2xl border-none p-4 shadow-sm transition-transform hover:scale-[1.02]`}
+            >
+              <div className="flex items-start gap-3">
+                {event.avatar && (
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={event.avatar} alt="Avatar" />
+                  </Avatar>
                 )}
+                <div className="flex-1">
+                  <div className="mb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <event.icon className="h-4 w-4" />
+                      <span className="text-sm font-medium">{event.type}</span>
+                    </div>
+                    <span className="text-sm text-gray-600">{event.date}</span>
+                  </div>
+                  <div className="bg-white p-4 rounded-3xl">
+                    <p className="mb-2 text-sm">{event.title}</p>
+                  </div>
+                  {event.time && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Clock className="h-4 w-4" />
+                      <span>Start at {event.time}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </motion.div>
         ))}
       </div>
     </div>

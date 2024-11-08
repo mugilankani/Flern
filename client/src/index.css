@@ -6,6 +6,12 @@ body {
   background-color: black;
 }
 
+.blur-background {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
+
+
 * {
   margin: 0;
   padding: 0;
