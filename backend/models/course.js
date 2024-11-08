@@ -48,6 +48,8 @@ const ModuleSchema = new mongoose.Schema(
   { timestamps: true }, // Automatically manage createdAt and updatedAt for ModuleSchema
 );
 
+
+
 // Course Schema
 const CourseSchema = new mongoose.Schema(
   {

@@ -44,14 +44,7 @@ function Content() {
 
     try {
       
-      // Make API call to mark the path as generated
-      const response = await axios.post(`http://localhost:3000/api/updatePath`, {
-        courseId,
-        moduleIndex,
-        pathIndex,
-        generated: true
-      });
-
+ 
       // Update the local state with the new generated status
       setModules(prevModules => {
         const newModules = [...prevModules];
