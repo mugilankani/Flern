@@ -40,7 +40,7 @@ export default function SideNav() {
   return (
     <div className="w-[40%] rounded-tr-3xl bg-[#EFEFEF] p-6 text-black">
       <h1 className="mb-6 text-2xl font-bold">
-        My Events{" "}
+        What's New{" "}
         <span role="img" aria-label="winking face">
           🤨
         </span>
