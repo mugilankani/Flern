@@ -1,119 +1,148 @@
-import React, { useEffect, useState } from "react";
-// import modules from "../../data/modules";
-import Course from "../../data/courses";
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 function Content() {
-  const [modules,setModules] = useState()
-  
-  const [toggleStates, setToggleStates] = useState();
-  const handleToggle = (index) => {
-    setToggleStates((prevStates) =>
-      prevStates.map((state, i) => (i === index ? !state : state))
-    );
+  const [modules, setModules] = useState([]);
+  const [toggleStates, setToggleStates] = useState([]);
+  const [course, setCourse] = useState(null);
+  const [currentPath, setCurrentPath] = useState({ moduleIndex: 0, pathIndex: 0 });
+
+  const [searchParams] = useSearchParams();
+  const courseId = searchParams.get("id");
+
+  // Function to check if a learning path is clickable
+  const isPathClickable = (moduleIndex, pathIndex) => {
+    // First path of first module is always clickable
+    if (moduleIndex === 0 && pathIndex === 0) return true;
+
+    const currentModule = modules[moduleIndex];
+    
+    // For paths within the same module
+    if (pathIndex > 0) {
+      // Check if previous path in the same module is generated
+      return currentModule.path[pathIndex - 1].metadata.generated === true;
+    }
+    
+    // For first path of subsequent modules
+    if (pathIndex === 0 && moduleIndex > 0) {
+      // Check if all paths in previous module are generated
+      const previousModule = modules[moduleIndex - 1];
+      return previousModule.path.every(path => path.metadata.generated === true);
+    }
+
+    return false;
   };
 
+  // Function to handle path click
+  const handlePathClick = async (moduleIndex, pathIndex) => {
+    if (!isPathClickable(moduleIndex, pathIndex)) {
+      alert("Complete previous learning paths first!");
+      return;
+    }
+
+    try {
+      
+      // Make API call to mark the path as generated
+      const response = await axios.post(`http://localhost:3000/api/updatePath`, {
+        courseId,
+        moduleIndex,
+        pathIndex,
+        generated: true
+      });
+
+      // Update the local state with the new generated status
+      setModules(prevModules => {
+        const newModules = [...prevModules];
+        newModules[moduleIndex].path[pathIndex].metadata.generated = true;
+        return newModules;
+      });
+
+      setCurrentPath({ moduleIndex, pathIndex });
+      
+      // You can add additional logic here for what happens when a path is clicked
+      console.log(`Module ${moduleIndex + 1}, Path ${pathIndex + 1} clicked`);
+    } catch (error) {
+      console.error("Error updating path:", error);
+    }
+  };
+
+  // Fetch course data
   useEffect(() => {
-    axios.get("http://localhost:3000/api/courses")
-    .then((res) => {setModules(res.data.modules),setToggleStates(Array(res.data?.modules?.length).fill(false))
-    } )
-  },[])
+    if (!courseId) {
+      console.error("Course ID is missing in the URL");
+      return;
+    }
+
+    const fetchCourseData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/api/course/${courseId}`);
+        setCourse(res.data);
+        setModules(res.data.modules);
+        setToggleStates(Array(res.data?.modules?.length).fill(false));
+      } catch (error) {
+        console.error("Error fetching course:", error);
+      }
+    };
+
+    fetchCourseData();
+  }, [courseId]);
 
   return (
-    <div className="h-screen w-full rounded-l-2xl bg-neutral-100 p-6 pt-5">
+    <div className="h-screen w-full bg-neutral-100 p-6 pt-5">
       <div className="flex items-center justify-between">
-        <h1 className="max-w-72 px-6 text-2xl font-semibold leading-7">
-          {Course[1].courseName}
+        <h1 className="text-2xl font-semibold text-neutral-900">
+          {course ? course.title : "Loading..."}
         </h1>
         <input
           type="text"
           placeholder="Search"
-          className="h-10 w-60 rounded-3xl bg-neutral-200 px-5 text-sm placeholder:text-neutral-700"
+          className="h-10 w-60 rounded-3xl bg-neutral-200 px-5 text-sm placeholder:text-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
+      
       <div className="mt-4 flex items-center justify-between border-t pt-4">
         <div className="flex items-end px-6">
-          <p className="mr-6 font-medium">Module-1</p>
-          <p>{modules && modules[0].title}</p>
-        </div>
-
-        <div className="flex space-x-2">
-          <div className="flex items-center gap-4 rounded-xl bg-blue-100 px-4 py-1 text-center font-medium">
-            <p className="text-sm font-normal text-neutral-800">Total</p>
-            <h1 className="text-xl font-bold">24</h1>
-          </div>
-          <div className="flex items-center gap-4 rounded-xl bg-green-200 px-4 py-1 text-center font-medium">
-            <p className="text-sm font-normal text-neutral-800">Completed</p>
-            <h1 className="text-xl font-bold">20</h1>
-          </div>
-          <div className="flex items-center gap-4 rounded-xl bg-neutral-200 px-4 py-1 text-center font-medium">
-            <p className="text-sm font-normal text-neutral-800">
-              Yet to complete
-            </p>
-            <h1 className="text-xl font-bold">4</h1>
-          </div>
+          <p className="mr-6 font-medium text-neutral-700">Modules</p>
         </div>
       </div>
 
-      <div className="mt-4 grid h-[calc(100vw-55.5rem)] grid-cols-1 gap-6 overflow-y-scroll pb-4 pr-3 md:grid-cols-2">
-        {modules && modules.map((module, index) => (
-          <div
-            key={index}
-            className={`relative h-fit rounded-3xl bg-white p-5 shadow-md`}
-          >
-            <h2 className="w-48 text-2xl font-semibold">{module.title}</h2>
-            <p className="mt-2 text-sm text-black">{module.description}</p>
-            <div className="mt-5 flex items-center justify-between">
-            <div
-  className={`flex justify-center rounded-2xl py-2 px-3 text-xs font-medium text-neutral-800 ${
-    module.status === "Completed 👏" ? "bg-[#C4FAC6]" : "bg-neutral-200"
-  }`}
->
-  {module.status}
-</div>
-              <div
-                className="ml-4 flex h-6 w-11 cursor-pointer items-center rounded-2xl bg-neutral-200 p-1"
-                onClick={() => handleToggle(index)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`h-4 transition-transform duration-300 ${
-                    toggleStates[index]
-                      ? "translate-x-6 opacity-0"
-                      : "translate-x-1 opacity-100"
-                  }`}
+      {modules.map((module, moduleIndex) => (
+        <div key={moduleIndex}>
+          <h1>Module {moduleIndex + 1}</h1>
+          <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 ">
+            {module.path.map((path, pathIndex) => {
+              const clickable = isPathClickable(moduleIndex, pathIndex);
+              
+              return (
+                <div
+                  key={pathIndex}
+                  className={`relative rounded-3xl p-5 shadow-lg transition-all duration-200 
+                    ${path.metadata.generated ? "bg-white" : "bg-neutral-200"}
+                    ${clickable ? "hover:shadow-xl" : "opacity-50 cursor-not-allowed"}
+                    ${currentPath.moduleIndex === moduleIndex && currentPath.pathIndex === pathIndex ? "ring-2 ring-blue-500" : ""}
+                  `}
+                  onClick={() => clickable && handlePathClick(moduleIndex, pathIndex)}
                 >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`h-4 w-4 transition-transform duration-300 ${
-                    toggleStates[index]
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-6 opacity-0"
-                  }`}
-                >
-                  <path d="M18 6 7 17l-5-5" />
-                  <path d="m22 10-7.5 7.5L13 16" />
-                </svg>
-              </div>
-            </div>
+                  <h2 className="text-xl font-semibold text-neutral-900">
+                    {path.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-neutral-600">
+                    {path.description}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between">
+                    <div className={`flex justify-center rounded-2xl py-2 px-3 text-xs font-medium text-neutral-800 
+                      ${path.metadata.generated ? "bg-[#C4FAC6]" : "bg-neutral-200"}`}
+                    >
+                      {path.metadata.generated ? "Completed 👏" : "Pending"}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }
